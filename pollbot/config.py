@@ -33,10 +33,22 @@ default_config = {
         "token": "pollbot",
         "cert_path": "/path/to/cert.pem",
         "port": 7000,
-    },
+    }
 }
 
 config_path = os.path.expanduser("~/.config/ultimate_pollbot.toml")
+replacements_path = os.path.expanduser("~/.config/replacements.csv")
+
+def load_replacements(config_file):
+    replacements = {}
+    if os.path.exists(config_path):
+        with open(config_file, 'r', encoding='utf-8') as file:
+            for line in file:
+                parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
+                if len(parts) == 2:
+                    text_to_replace, new_text = parts
+                    replacements[text_to_replace] = new_text
+    return replacements
 
 if not os.path.exists(config_path):
     with open(config_path, "w") as file_descriptor:
@@ -45,6 +57,9 @@ if not os.path.exists(config_path):
     sys.exit(1)
 else:
     config = toml.load(config_path)
+    replacements = load_replacements(replacements_path)
+    if(len(replacements)!=0):
+        print("Replacements loaded")
 
     # Set default values for any missing keys in the loaded config
     for key, category in default_config.items():

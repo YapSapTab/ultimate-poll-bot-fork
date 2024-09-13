@@ -14,6 +14,12 @@ from pollbot.poll.helper import (
     poll_allows_multiple_votes,
 )
 from pollbot.poll.vote import get_sorted_doodle_votes, get_sorted_votes
+from pollbot.config import replacements
+
+def replace_text(content):
+    for text_to_replace, new_text in replacements.items():
+        content = content.replace(text_to_replace, new_text)  # Заменяет, если находит текст
+    return content
 
 
 def get_doodle_vote_lines(poll: Poll, option: Option, summarize: bool) -> list[str]:
@@ -68,7 +74,9 @@ def get_doodle_answer_lines(
     current_line = "┆ "
     characters = len(current_line)
     for index, vote in enumerate(votes):
-        name_length = len(vote.user.name)
+        username = replace_text(vote.user.name)
+
+        name_length = len(username)
 
         # Only the characters of the username count (not the mention)
         characters += name_length
@@ -79,7 +87,7 @@ def get_doodle_answer_lines(
             current_line = "┆ "
             characters = len(current_line)
 
-        user_mention = f"[{vote.user.name}](tg://user?id={vote.user.id})"
+        user_mention = f"[{username}](tg://user?id={vote.user.id})"
         # Add a comma at the end of the user mention if it's not the last one
         if index != (len(votes) - 1):
             user_mention += ", "
