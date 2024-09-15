@@ -6,7 +6,12 @@ from sqlalchemy.orm.scoping import scoped_session
 
 from pollbot.enums import UserSorting
 from pollbot.models import Option, Poll, User, Vote
+from pollbot.config import replacements
 
+def replace_text(content):
+    for text_to_replace, new_text in replacements.items():
+        content = content.replace(text_to_replace, new_text)  # Заменяет, если находит текст
+    return content
 
 def init_votes(session: scoped_session, poll: Poll, user: User) -> None:
     """
@@ -90,7 +95,12 @@ def get_sorted_votes(poll: Poll, votes: list[Vote]) -> InstrumentedList:
 
     def get_user_name(vote):
         """Get the name of user to sort votes."""
-        return vote.user.name
+        username=''
+        if(vote.user.username):
+            username = replace_text(vote.user.username)
+        else:
+            username = replace_text(vote.user.name)
+        return username
 
     if poll.user_sorting == UserSorting.name.name:
         votes.sort(key=get_user_name)

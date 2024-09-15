@@ -132,7 +132,13 @@ def get_vote_lines(poll: Poll, option: Option, summarize: bool) -> list[str]:
 
 def get_vote_line(poll: Poll, option: Option, vote: Vote, index: int) -> str:
     """Get the line showing an actual vote."""
-    user_mention = f"[{vote.user.name}](tg://user?id={vote.user.id})"
+    username=''
+    if(vote.user.username):
+        username = replace_text(vote.user.username)
+    else:
+        username = replace_text(vote.user.name)
+        
+    user_mention = f"[{username}](tg://user?id={vote.user.id})"
 
     if index == (len(option.votes) - 1):
         vote_line = f"└ {user_mention}"
