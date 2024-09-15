@@ -74,7 +74,11 @@ def get_doodle_answer_lines(
     current_line = "┆ "
     characters = len(current_line)
     for index, vote in enumerate(votes):
-        username = replace_text(vote.user.name)
+        username=''
+        if(vote.user.username):
+            username = replace_text(vote.user.username)
+        else:
+            username = replace_text(vote.user.name)
 
         name_length = len(username)
 
