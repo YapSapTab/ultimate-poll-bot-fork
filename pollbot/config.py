@@ -45,14 +45,15 @@ def load_replacements(config_file):
     if os.path.exists(config_path):
         with open(config_file, 'r', encoding='utf-8') as file:
             for line in file:
-                lexer = shlex.shlex(line, posix=True)
-                lexer.whitespace_split = True
-                lexer.whitespace = ' '
+                if(len(line)>1):
+                    lexer = shlex.shlex(line, posix=True)
+                    lexer.whitespace_split = True
+                    lexer.whitespace = ' '
     
-                #parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
-                if len(lexer) == 2:
-                    text_to_replace, new_text = lexer
-                    replacements[text_to_replace] = new_text
+                    #parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
+                    if len(lexer) == 2:
+                        text_to_replace, new_text = lexer
+                        replacements[text_to_replace] = new_text
     return replacements
 
 if not os.path.exists(config_path):
