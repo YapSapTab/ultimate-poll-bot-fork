@@ -4,6 +4,7 @@ import os
 import sys
 
 import toml
+import shlex
 
 default_config = {
     "telegram": {
@@ -44,9 +45,13 @@ def load_replacements(config_file):
     if os.path.exists(config_path):
         with open(config_file, 'r', encoding='utf-8') as file:
             for line in file:
-                parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
-                if len(parts) == 2:
-                    text_to_replace, new_text = parts
+                lexer = shlex.shlex(line, posix=True)
+                lexer.whitespace_split = True
+                lexer.whitespace = ' '
+    
+                #parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
+                if len(lexer) == 2:
+                    text_to_replace, new_text = lexer
                     replacements[text_to_replace] = new_text
     return replacements
 
