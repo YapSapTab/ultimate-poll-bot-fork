@@ -50,7 +50,7 @@ def load_replacements(config_file):
                     lexer = shlex.shlex(line, posix=True)
                     lexer.whitespace_split = True
                     lexer.whitespace = ' '
-                    print(line, lexer)
+                    lexer = list(lexer)
                     #parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
                     if len(lexer) == 2:
                         text_to_replace, new_text = lexer
