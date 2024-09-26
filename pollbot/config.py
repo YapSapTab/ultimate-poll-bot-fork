@@ -46,10 +46,11 @@ def load_replacements(config_file):
         with open(config_file, 'r', encoding='utf-8') as file:
             for line in file:
                 if(len(line)>1):
+                    
                     lexer = shlex.shlex(line, posix=True)
                     lexer.whitespace_split = True
                     lexer.whitespace = ' '
-    
+                    print(line, lexer)
                     #parts = line.strip().split(maxsplit=1)  # Разделение строки на 2 части
                     if len(lexer) == 2:
                         text_to_replace, new_text = lexer
